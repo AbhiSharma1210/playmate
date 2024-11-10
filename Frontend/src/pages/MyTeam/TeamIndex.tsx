@@ -4,8 +4,8 @@ import { PageView } from "layout/PageView";
 import { MembersAndLineup } from "components/MembersAndLineup/MembersAndLineup";
 
 import TeamCover from "assets/team-cover.jpg";
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import RightArrow from "assets/right-arrow.svg";
 import MoreIcon from "assets/more.svg";
 import Team1 from "assets/team-1.png";
@@ -62,9 +62,9 @@ function ImageActions() {
   );
 }
 
-function TopBlock({teamData} : any) {
+function TopBlock({ teamData }: any) {
 
-  function formatDateTime(dateTime : any) {
+  function formatDateTime(dateTime: any) {
     // Format to e.g Jan 2023
     var date = new Date(dateTime);
     var month = date.toLocaleString('default', { month: 'short' });
@@ -292,235 +292,235 @@ export function TeamIndex() {
 
   const [teamInviteLink, setTeamInviteLink] = useState("");
 
-  const closePopup = function() {
-      // This function is called when the user clicks on the close button of the popup
+  const closePopup = function () {
+    // This function is called when the user clicks on the close button of the popup
 
-      // Hide the popup
-      setPopupVisible(false);
+    // Hide the popup
+    setPopupVisible(false);
   }
 
-  const setSelectedTeam = function() {
-      // This function is called when the user selects a sport from the dropdown teamDropdown
+  const setSelectedTeam = function () {
+    // This function is called when the user selects a sport from the dropdown teamDropdown
 
-      // Get the teamId of the selected team
-      var teamId = document.getElementById("teamDropdown").value;
+    // Get the teamId of the selected team
+    var teamId = document.getElementById("teamDropdown").value;
 
-      if(teamId == "new") {
-          // If the user selects "Create a new team" then redirect them to the Create Team page
-          window.location.href = "../../../CreateTeam";
-      } else {
-          // Set the selectedTeamId to the teamId of the selected team
-          setSelectedTeamId(teamId);
-      }
+    if (teamId == "new") {
+      // If the user selects "Create a new team" then redirect them to the Create Team page
+      window.location.href = "../../../CreateTeam";
+    } else {
+      // Set the selectedTeamId to the teamId of the selected team
+      setSelectedTeamId(teamId);
+    }
 
   }
 
   function setOption(selectElement, value) {
-      return [...selectElement.options].some((option, index) => {
-          if (option.value == value) {
-              selectElement.selectedIndex = index;
-              return true;
-          }
-      });
+    return [...selectElement.options].some((option, index) => {
+      if (option.value == value) {
+        selectElement.selectedIndex = index;
+        return true;
+      }
+    });
   }
 
-  const setSelectedTeamById = function(teamId) {
-      // Set the selectedTeamId to the teamId passed in
-      setSelectedTeamId(teamId);
+  const setSelectedTeamById = function (teamId) {
+    // Set the selectedTeamId to the teamId passed in
+    setSelectedTeamId(teamId);
 
-      // Wait for the teamsData to be loaded
-      if(loaded) {   
-          setOption(document.getElementById("teamDropdown"), teamId);
-      }
+    // Wait for the teamsData to be loaded
+    if (loaded) {
+      setOption(document.getElementById("teamDropdown"), teamId);
+    }
   }
 
-  const setSelectedSport = function() {
-      // This function is called when the user selects a sport from the dropdown sportsTypesDropdown
+  const setSelectedSport = function () {
+    // This function is called when the user selects a sport from the dropdown sportsTypesDropdown
 
-      setLoadedTeamData(false);
+    setLoadedTeamData(false);
 
-      // Get the sportId of the selected sport
-      var sportId = document.getElementById("sportsTypesDropdown").value;
+    // Get the sportId of the selected sport
+    var sportId = document.getElementById("sportsTypesDropdown").value;
 
-      // Set the selectedSportId to the sportId of the selected sport
-      setSelectedSportId(sportId);
+    // Set the selectedSportId to the sportId of the selected sport
+    setSelectedSportId(sportId);
 
-      // Select the first Team in the list of teams from the selected sport
-      try {
+    // Select the first Team in the list of teams from the selected sport
+    try {
 
-          let teamId = teamsData.filter((team) => (team.sportsType == sportId || team.id == "new"))[0].id;
+      let teamId = teamsData.filter((team) => (team.sportsType == sportId || team.id == "new"))[0].id;
 
-          if(teamId == "new") {
-              // If the user selects "Create a new team" then redirect them to the Create Team page
-              window.location.href = "../../../CreateTeam";
-          } else {
-              // Set the selectedTeamId to the teamId of the selected team
-              setSelectedTeamById(teamId);
-              updateTeamData();
-          }
-          
-      } catch (error) {
-          
+      if (teamId == "new") {
+        // If the user selects "Create a new team" then redirect them to the Create Team page
+        window.location.href = "../../../CreateTeam";
+      } else {
+        // Set the selectedTeamId to the teamId of the selected team
+        setSelectedTeamById(teamId);
+        updateTeamData();
       }
+
+    } catch (error) {
+
+    }
   }
 
   useEffect(() => {
-      fetch("http://127.0.0.1:5000/getUserData", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-              token: window.localStorage.getItem("token"),
-          }),
-      })
+    fetch("http://127.0.0.1:5000/getUserData", {
+      method: "POST",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+      }),
+    })
       .then((res) => res.json())
       .then((data) => {
-          if (data.data.userType == "Admin") {
-              setAdmin(true);
-          }
-  
-          setUserData(data.data);
-          
-          if (data.data == "token expired") {
-              window.localStorage.clear();
-              window.location.href = "../../../login";
-          }
+        if (data.data.userType == "Admin") {
+          setAdmin(true);
+        }
+
+        setUserData(data.data);
+
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "../../../login";
+        }
 
       });
 
-      // Get the list of sports that exist in the database
-      fetch("http://127.0.0.1:5000/getSports", {
-          method: "GET",
-          crossDomain: true,
-          headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-          }
-      })
+    // Get the list of sports that exist in the database
+    fetch("http://127.0.0.1:5000/getSports", {
+      method: "GET",
+      crossDomain: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      }
+    })
       .then((res) => res.json())
       .then((data) => {
-          setSportsData(data.data);
+        setSportsData(data.data);
 
-          setSelectedSportId(data.data[0].id);
+        setSelectedSportId(data.data[0].id);
       });
 
-      // Get the popup message from the local storage
-      setPopupMessage(window.localStorage.getItem("message"));
-      setPopupVisible(false);
+    // Get the popup message from the local storage
+    setPopupMessage(window.localStorage.getItem("message"));
+    setPopupVisible(false);
   }, []);
 
   useEffect(() => {
-      if(popupMessage != "" && popupMessage != undefined && popupMessage != null){
-          console.log("popupMessage: ", popupMessage);
+    if (popupMessage != "" && popupMessage != undefined && popupMessage != null) {
+      console.log("popupMessage: ", popupMessage);
 
-          // Set the popup visible to true
-          setPopupVisible(true);
+      // Set the popup visible to true
+      setPopupVisible(true);
 
-          // Remove the popup message from the local storage
-          window.localStorage.removeItem("message");
+      // Remove the popup message from the local storage
+      window.localStorage.removeItem("message");
 
-          // Make the popup visible for 5 seconds
-          setTimeout(() => {
-              setPopupVisible(false);
-          }
-          , 5000);
-
-          console.log("popupVisible: ", popupVisible);
-      } else {
-          setPopupVisible(false);
+      // Make the popup visible for 5 seconds
+      setTimeout(() => {
+        setPopupVisible(false);
       }
+        , 5000);
+
+      console.log("popupVisible: ", popupVisible);
+    } else {
+      setPopupVisible(false);
+    }
   }, [popupMessage]);
 
   useEffect(() => {
-      if(selectedTeamId == "" && id != undefined) {
-          setSelectedTeamById(id);
-      } else if (selectedTeamId == "" && id == undefined) {
-          if(teamsData.length > 0) {
-              setSelectedTeamById(teamsData[0].id);
+    if (selectedTeamId == "" && id != undefined) {
+      setSelectedTeamById(id);
+    } else if (selectedTeamId == "" && id == undefined) {
+      if (teamsData.length > 0) {
+        setSelectedTeamById(teamsData[0].id);
 
-              setLoaded(true);
-          }
+        setLoaded(true);
       }
+    }
   }, [teamsData, loaded]);
 
   useEffect(() => {
-      updateTeamData();
+    updateTeamData();
   }, [selectedTeamId]);
 
   function updateTeamData() {
-      if(selectedTeamId != "") {
-          fetch("http://127.0.0.1:5000/getTeamData/"+selectedTeamId, {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-              token: window.localStorage.getItem("token"),
-          }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              setTeamData(data.data);
+    if (selectedTeamId != "") {
+      fetch("http://127.0.0.1:5000/getTeamData/" + selectedTeamId, {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          token: window.localStorage.getItem("token"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setTeamData(data.data);
 
-              // Create the team invite link
-              // Get the current base url
-              var baseUrl = window.location.href;
+          // Create the team invite link
+          // Get the current base url
+          var baseUrl = window.location.href;
 
-              // Only get the base url without any page names
-              baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf("/"));
-              baseUrl = baseUrl.replace("/Teams", "");
+          // Only get the base url without any page names
+          baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf("/"));
+          baseUrl = baseUrl.replace("/Teams", "");
 
-              setTeamInviteLink(baseUrl + "/JoinTeam/" + data.data.id + "/" + data.data.inviteCode);
-              
-              setLoaded(true);
+          setTeamInviteLink(baseUrl + "/JoinTeam/" + data.data.id + "/" + data.data.inviteCode);
 
-              // Wait at least 500ms before setting the loadedTeamData to true
-              setTimeout(() => {
-                  setLoadedTeamData(true);
-              }, 500);
-          });
-      }
+          setLoaded(true);
+
+          // Wait at least 500ms before setting the loadedTeamData to true
+          setTimeout(() => {
+            setLoadedTeamData(true);
+          }, 500);
+        });
+    }
   }
 
   useEffect(() => {
-      // Get the list of members of the team
-      if(selectedTeamId != "") {
-          fetch("http://127.0.0.1:5000/getTeamMembers/", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-                  teamId: selectedTeamId,
-                  token: window.localStorage.getItem("token"),
-              }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              setMembersData(data.data);
+    // Get the list of members of the team
+    if (selectedTeamId != "") {
+      fetch("http://127.0.0.1:5000/getTeamMembers/", {
+        method: "POST",
+        crossDomain: true,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          teamId: selectedTeamId,
+          token: window.localStorage.getItem("token"),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setMembersData(data.data);
 
-              // Check if the user is a admin of the team
-              let isAdmin = false;
-              for(var i = 0; i < data.data.length; i++) {
-                  if(data.data[i].id == userData._id && data.data[i].role == "Admin") {
-                      isAdmin = true;
-                  }
-              }
-              setTeamAdmin(isAdmin);
+          // Check if the user is a admin of the team
+          let isAdmin = false;
+          for (var i = 0; i < data.data.length; i++) {
+            if (data.data[i].id == userData._id && data.data[i].role == "Admin") {
+              isAdmin = true;
+            }
           }
-          );
-      }
+          setTeamAdmin(isAdmin);
+        }
+        );
+    }
   }, [selectedTeamId]);
 
   return (

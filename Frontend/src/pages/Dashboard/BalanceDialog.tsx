@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 
 import { Dialog, Transition } from "@headlessui/react";
 
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import { DialogCrossButton } from "components/DialogCrossButton";
 
 import BalanceIcon from "./icons/balance.svg";
@@ -119,7 +119,7 @@ export function BalanceTrigger() {
       </button>
 
       <Transition show={isOpen} as={React.Fragment}>
-        <Dialog onClose={() => {}}>
+        <Dialog onClose={() => { }}>
           <Transition.Child
             as={React.Fragment}
             enter='ease-out duration-300'

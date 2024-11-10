@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import cx from "classnames";
 import { Popover } from "@headlessui/react";
 import { usePopper } from "react-popper";
@@ -11,8 +11,25 @@ import Profile5 from "assets/profile-5.png";
 import Team3 from "assets/team-3.png";
 import { UploadDialogTrigger } from "./UploadDialog";
 
+type appNotification = {
+  id: string;
+  type: "friendRequest" | "eventInvite" | string;
+  fname?: string;
+  lname?: string;
+  name?: string;
+  requestedAt?: string;
+  startTime?: string;
+  endTime?: string;
+  date?: string;
+  message?: string;
+  time?: string;
+};
 
-export function NotificationsTarget({notifications, setNotifications} : any) {
+
+export function NotificationsTarget({ notifications, setNotifications }: {
+  notifications: appNotification[];
+  setNotifications: React.Dispatch<React.SetStateAction<appNotification[]>>;
+}) {
   let [referenceElem, setReferenceElem] = useState();
   let [floatingElement, setFloatingElement] = useState();
 
@@ -91,7 +108,10 @@ function EmbeddedNotificationContent(p: React.PropsWithChildren) {
   );
 }
 
-function NotificationsBox({notifications, setNotifications} : any) {
+function NotificationsBox({ notifications, setNotifications }: {
+  notifications: appNotification[];
+  setNotifications: React.Dispatch<React.SetStateAction<appNotification[]>>;
+}) {
   return (
     <>
       <h1 className='mb-5 text-lg font-bold desktop:text-base desktop:font-normal'>
@@ -104,230 +124,228 @@ function NotificationsBox({notifications, setNotifications} : any) {
   );
 }
 
-function NotificationList({notifications, setNotifications} : any) {
-  
-  function diffBetweenDatesInSecs(date1: any, date2: any) {
-    const diffInMs = Math.abs(date2 - date1);
+function NotificationList({ notifications, setNotifications }: {
+  notifications: appNotification[];
+  setNotifications: React.Dispatch<React.SetStateAction<appNotification[]>>;
+}) {
+
+  function diffBetweenDatesInSecs(date1: Date, date2: Date): number {
+    const diffInMs = Math.abs(date2.getTime() - date1.getTime());
     return diffInMs / 1000;
   }
 
-  function formatSecsToTime(secs: any) {
+  function formatSecsToTime(secs: number): string {
     const days = Math.floor(secs / 86400);
     const hours = Math.floor(secs / 3600);
     const minutes = Math.floor((secs % 3600) / 60);
     const seconds = Math.floor((secs % 3600) % 60);
 
     // Format to XX Days
-    if(days > 0) {
-      return days + " Days";
-    }
+    if (days > 0) return days + " Days";
 
     // Format to XX Hours XX Minutes
-    if(hours > 0) {
-      return hours + " Hours " + minutes + " Minutes";
-    }
+    if (hours > 0) return hours + " Hours " + minutes + " Minutes";
 
     // Format to XX Minutes
-    if(minutes > 0) {
-      return minutes + " Minutes";
-    }
+    if (minutes > 0) return minutes + " Minutes";
 
     // Format to XX Seconds
-    if(seconds > 0) {
-      return seconds + " Seconds";
-    }
+    return seconds + " Seconds";
 
   }
 
-  function handleAcceptFriendRequest(id) {
+  function handleAcceptFriendRequest(id: string) {
 
-      fetch("http://127.0.0.1:5000/acceptFriendRequest", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                  "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-                  token: window.localStorage.getItem("token"),
-                  friendId: id,
-              }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              if (data.data == "token expired") {
-                  window.localStorage.clear();
-                  window.location.href = "../../../login";
-              } else {
-                  // Remove the notification from the array
-                  let newNotifications = notifications.filter((notification) => {
-                      return notification.id != id;
-                  });
-                  setNotifications(newNotifications);
-              }
-          }
+    fetch("http://127.0.0.1:5000/acceptFriendRequest", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+        friendId: id,
+      }),
+    })
+
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "../../../login";
+        } else {
+          // Remove the notification from the array
+          let newNotifications = notifications.filter((notification: appNotification) => {
+            return notification.id != id;
+          });
+          setNotifications(newNotifications);
+        }
+      }
       );
 
   }
 
-  function handleRejectFriendRequest(id) {
-      fetch("http://127.0.0.1:5000/rejectFriendRequest", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                  "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-                  token: window.localStorage.getItem("token"),
-                  friendId: id,
-              }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              if (data.data == "token expired") {
-                  window.localStorage.clear();
-                  window.location.href = "../../../login";
-              } else {
-                  // Remove the notification from the array
-                  let newNotifications = notifications.filter((notification) => {
-                      return notification.id != id;
-                  });
-                  setNotifications(newNotifications);
-              }
-          }
+  function handleRejectFriendRequest(id: string) {
+    fetch("http://127.0.0.1:5000/rejectFriendRequest", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+        friendId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "../../../login";
+        } else {
+          // Remove the notification from the array
+          let newNotifications = notifications.filter((notification: appNotification) => {
+            return notification.id != id;
+          });
+          setNotifications(newNotifications);
+        }
+      }
       );
   }
 
-  function handleAcceptEventInvite(id) {
-      fetch("http://127.0.0.1:5000/acceptEventInvite", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                  "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-                  token: window.localStorage.getItem("token"),
-                  eventId: id,
-              }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              if (data.data == "token expired") {
-                  window.localStorage.clear();
-                  window.location.href = "../../../login";
-              } else {
-                  // Remove the notification from the array
-                  let newNotifications = notifications.filter((notification) => {
-                      return notification.id != id;
-                  });
-                  setNotifications(newNotifications);
-              }
-          }
+  function handleAcceptEventInvite(id: string) {
+    fetch("http://127.0.0.1:5000/acceptEventInvite", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+        eventId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "../../../login";
+        } else {
+          // Remove the notification from the array
+          let newNotifications = notifications.filter((notification: appNotification) => {
+            return notification.id != id;
+          });
+          setNotifications(newNotifications);
+        }
+      }
       );
   }
 
-  function handleRejectEventInvite(id) {
-      fetch("http://127.0.0.1:5000/rejectEventInvite", {
-              method: "POST",
-              crossDomain: true,
-              headers: {
-                  "Content-Type": "application/json",
-                  Accept: "application/json",
-                  "Access-Control-Allow-Origin": "*",
-              },
-              body: JSON.stringify({
-                  token: window.localStorage.getItem("token"),
-                  eventId: id,
-              }),
-          })
-          .then((res) => res.json())
-          .then((data) => {
-              if (data.data == "token expired") {
-                  window.localStorage.clear();
-                  window.location.href = "../../../login";
-              } else {
-                  // Remove the notification from the array
-                  let newNotifications = notifications.filter((notification) => {
-                      return notification.id != id;
-                  });
-                  setNotifications(newNotifications);
-              }
-          }
+  function handleRejectEventInvite(id: string) {
+    fetch("http://127.0.0.1:5000/rejectEventInvite", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        token: window.localStorage.getItem("token"),
+        eventId: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "../../../login";
+        } else {
+          // Remove the notification from the array
+          let newNotifications = notifications.filter((notification: appNotification) => {
+            return notification.id != id;
+          });
+          setNotifications(newNotifications);
+        }
+      }
       );
   }
 
 
   return (
     <>
-    {notifications.length > 0 ? (
+      {notifications.length > 0 ? (
         notifications.map((notification, index) => {
-            if(notification.type == "friendRequest") {
-              return(
-                <Notification
-                  key={index}
-                  title={
-                    <>
-                      <span className='text-blue-high'>{notification.fname} {notification.lname}</span> wants to be your Friend.
-                    </>
-                  }
-                  profileSrc={Profile3}
-                  time={formatSecsToTime(diffBetweenDatesInSecs(new Date(), new Date(notification.requestedAt))) + " ago"}
-                >
-                  <div className='mt-3 flex gap-x-2.5'>
-                    <button onClick={() => handleRejectFriendRequest(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-grey-high px-1.5 py-1.5 text-white hover:bg-blue-high/10 desktop:px-3'>
-                      Decline
-                    </button>
-                    <button onClick={() => handleAcceptFriendRequest(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-blue-high px-1.5 py-1.5 text-sheet hover:bg-blue-high/80 desktop:px-3'>
-                      Accept
-                    </button>
-                  </div>
-                </Notification>
-              )
-            } else if(notification.type == "eventInvite"){
-              return(
-                <Notification
-                  key={index}
-                  title={
-                    <>
-                      Event Invite: <span className='text-blue-high'>{notification.name}</span>
-                    </>
-                  }
-                  profileSrc={Profile3}
-                  time={notification.startTime + " - " + notification.endTime + " " + notification.date}
-                >
-                  <div className='mt-3 flex gap-x-2.5'>
-                    <button onClick={() => handleRejectEventInvite(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-grey-high px-1.5 py-1.5 text-white hover:bg-blue-high/10 desktop:px-3'>
-                      Decline
-                    </button>
-                    <button onClick={() => handleAcceptEventInvite(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-blue-high px-1.5 py-1.5 text-sheet hover:bg-blue-high/80 desktop:px-3'>
-                      Accept
-                    </button>
-                  </div>
-                </Notification>
-              )
+          if (notification.type == "friendRequest") {
+            return (
+              <Notification
+                key={index}
+                title={
+                  <>
+                    <span className='text-blue-high'>{notification.fname} {notification.lname}</span> wants to be your Friend.
+                  </>
+                }
+                profileSrc={Profile3}
+                time={notification.requestedAt
+                  ? formatSecsToTime(diffBetweenDatesInSecs(new Date(), new Date(notification.requestedAt))) + " ago"
+                  : "Unknown time"}
+              >
+                <div className='mt-3 flex gap-x-2.5'>
+                  <button onClick={() => handleRejectFriendRequest(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-grey-high px-1.5 py-1.5 text-white hover:bg-blue-high/10 desktop:px-3'>
+                    Decline
+                  </button>
+                  <button onClick={() => handleAcceptFriendRequest(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-blue-high px-1.5 py-1.5 text-sheet hover:bg-blue-high/80 desktop:px-3'>
+                    Accept
+                  </button>
+                </div>
+              </Notification>
+            )
+          } else if (notification.type == "eventInvite") {
+            return (
+              <Notification
+                key={index}
+                title={
+                  <>
+                    Event Invite: <span className='text-blue-high'>{notification.name}</span>
+                  </>
+                }
+                profileSrc={Profile3}
+                time={notification.startTime + " - " + notification.endTime + " " + notification.date}
+              >
+                <div className='mt-3 flex gap-x-2.5'>
+                  <button onClick={() => handleRejectEventInvite(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-grey-high px-1.5 py-1.5 text-white hover:bg-blue-high/10 desktop:px-3'>
+                    Decline
+                  </button>
+                  <button onClick={() => handleAcceptEventInvite(notification.id)} className='flex min-w-[7.5rem] items-center justify-center rounded-half bg-blue-high px-1.5 py-1.5 text-sheet hover:bg-blue-high/80 desktop:px-3'>
+                    Accept
+                  </button>
+                </div>
+              </Notification>
+            )
 
-            } else {
-                return (
-                    <div key={index} className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-                        <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
-                        <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">{notification.fname} {notification.lname}<span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> {notification.time}</span></h5>
-                        <h6 className="text-grey-500 fw-500 font-xssss lh-4">{notification.message}</h6>
-                    </div>
-                );
-            }
+          } else {
+            return (
+              <div key={index} className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
+                <img src="assets/images/user.png" alt="user" className="w40 position-absolute left-0" />
+                <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">{notification.fname} {notification.lname}<span className="text-grey-400 font-xsssss fw-600 float-right mt-1"> {notification.time}</span></h5>
+                <h6 className="text-grey-500 fw-500 font-xssss lh-4">{notification.message}</h6>
+              </div>
+            );
+          }
 
         })
-    ) : (
+      ) : (
         <div className="card bg-transparent-card w-100 border-0 ps-5 mb-3">
-            <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">No notifications</h5>
+          <h5 className="font-xsss text-grey-900 mb-1 mt-0 fw-700 d-block">No notifications</h5>
         </div>
-    )}
-      
+      )}
+
       {/*<Notification
         title='Event team match ended'
         profileSrc={Profile2}

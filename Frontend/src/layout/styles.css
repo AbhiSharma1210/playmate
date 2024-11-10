@@ -1,4 +1,6 @@
+@tailwind base;
 @tailwind components;
+@tailwind utilities;
 
 @layer components {
   #sidebar {
@@ -17,6 +19,7 @@
 
       @apply z-[3002];
     }
+
     #sidebar[data-app-open="true"] {
       @apply left-0;
     }
@@ -39,6 +42,7 @@
     @apply text-grey-subtle hover:bg-blue-high/10;
     @apply -mx-4 rounded-half px-4 py-3;
   }
+
   .sidelinks a.active {
     @apply text-[#5CE5E2];
   }

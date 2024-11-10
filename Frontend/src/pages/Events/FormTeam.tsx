@@ -6,8 +6,8 @@ import IconTime from "assets/input-time.svg";
 import IconLocation from "assets/event-location.svg";
 import { Dialog } from "@headlessui/react";
 import { DialogCrossButton } from "components/DialogCrossButton";
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import { DollarIcon } from "components/adaptive-icons/DollarIcon";
 import CopyLinkIcon from 'assets/copy-link.svg';
 import copyToClipboard from 'copy-to-clipboard';
@@ -17,6 +17,7 @@ import CalenderComponent from "components/CalendarComponent";
 import { TimePicker } from "components/TimePicker";
 import usePlacesService from "react-google-autocomplete/lib/usePlacesAutocompleteService"
 import { LocationList } from "components/LocationList";
+
 
 export function FormTeam(props: any) {
   const { setEventInfo, gameTypeError, teamError, eventNameError, dateError, startTimeError, endTimeError, locationError, costError, numPlayersError,
@@ -59,7 +60,7 @@ export function FormTeam(props: any) {
   const onChangeLocation = (key: string) => {
     setSearchKey(key)
     setEventLocation(key)
-    getPlacePredictions({input: key})
+    getPlacePredictions({ input: key })
   }
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export function FormTeam(props: any) {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/getFriends", {
       method: "POST",
-      crossDomain: true,
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -80,49 +81,49 @@ export function FormTeam(props: any) {
         token: window.localStorage.getItem("token"),
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setAllFriends(data.data);
-      setShowFriends(data.data)
-      
-      if (data.data == "token expired") {
-        window.localStorage.clear();
-        window.location.href = "./login";
-      }
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        setAllFriends(data.data);
+        setShowFriends(data.data)
+
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "./login";
+        }
+      });
 
     fetch("http://127.0.0.1:5000/getSports", {
       method: "GET",
-      crossDomain: true,
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
       }
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         setSportsData(data.data);
       }
-    );
+      );
 
     fetch("http://127.0.0.1:5000/getTeams", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
+      method: "POST",
+      mode: "cors",
+      headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
+      },
+      body: JSON.stringify({
         token: window.localStorage.getItem("token"),
-        }),
+      }),
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         setTeams(data.data);
-    }
-    );
+      }
+      );
   }, []);
 
   const onSelectMember = (selected: boolean, userId: string) => {
@@ -217,7 +218,7 @@ export function FormTeam(props: any) {
             })}
           />
           {
-            gameTypeError && <div className="mt-2" style={{color: "red"}}>Please select type</div>
+            gameTypeError && <div className="mt-2" style={{ color: "red" }}>Please select type</div>
           }
         </div>
         <div className='min-w-[12rem] flex-1 flex flex-col'>
@@ -232,7 +233,7 @@ export function FormTeam(props: any) {
             })}
           />
           {
-            teamError && <div className="mt-2" style={{color: "red"}}>Please select team</div>
+            teamError && <div className="mt-2" style={{ color: "red" }}>Please select team</div>
           }
         </div>
       </div>
@@ -248,22 +249,22 @@ export function FormTeam(props: any) {
           <div className="app-textbox">
             <label>Date</label>
             <div className='app-textbox-area'>
-              <input 
+              <input
                 onFocus={() => setShowCalendar(true)}
                 value={date}
-                size={1} 
+                size={1}
                 placeholder='dd/mm/yyyy' />
               <img className='mr-2 w-6' src={IconDate} />
             </div>
           </div>
           {
-            showCalendar && 
-              <div className="absolute calendar z-10 calendar-outline">
-                <CalenderComponent setSelectedDate={setDate} outSideClickFunc={() => setShowCalendar(false)} />
-              </div>
+            showCalendar &&
+            <div className="absolute calendar z-10 calendar-outline">
+              <CalenderComponent setSelectedDate={setDate} outSideClickFunc={() => setShowCalendar(false)} />
+            </div>
           }
           {
-            dateError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            dateError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
         <div className=' min-w-full sm:min-w-[12rem] flex-1 flex flex-col relative'>
@@ -272,42 +273,42 @@ export function FormTeam(props: any) {
             <div className='app-textbox-area'>
               <input
                 onFocus={() => setShowStartTimePicker(true)}
-                value={startTime} 
-                size={1} 
+                value={startTime}
+                size={1}
                 placeholder='00:00' />
               <img className='mr-2 w-6' src={IconTime} />
             </div>
           </div>
           {
-            showStartTimePicker && 
-              <div className="absolute time-picker z-10 calendar-outline">
-                <TimePicker setSelectedTime={setStartTime} outSideClickFunc={() => setShowStartTimePicker(false)} />
-              </div>
+            showStartTimePicker &&
+            <div className="absolute time-picker z-10 calendar-outline">
+              <TimePicker setSelectedTime={setStartTime} outSideClickFunc={() => setShowStartTimePicker(false)} />
+            </div>
           }
           {
-            startTimeError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            startTimeError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
         <div className=' min-w-full sm:min-w-[12rem] flex-1 flex flex-col relative'>
           <div className="app-textbox">
             <label>End time</label>
             <div className='app-textbox-area'>
-              <input 
+              <input
                 onFocus={() => setShowEndTimePicker(true)}
-                value={endTime} 
-                size={1} 
+                value={endTime}
+                size={1}
                 placeholder='00:00' />
               <img className='mr-2 w-6' src={IconTime} />
             </div>
           </div>
           {
-            showEndTimePicker && 
-              <div className="absolute time-picker z-10 calendar-outline">
-                <TimePicker setSelectedTime={setEndTime} outSideClickFunc={() => setShowEndTimePicker(false)} startTime={startTime} />
-              </div>
+            showEndTimePicker &&
+            <div className="absolute time-picker z-10 calendar-outline">
+              <TimePicker setSelectedTime={setEndTime} outSideClickFunc={() => setShowEndTimePicker(false)} startTime={startTime} />
+            </div>
           }
           {
-            endTimeError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            endTimeError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
       </div>
@@ -322,7 +323,7 @@ export function FormTeam(props: any) {
           {
             locationError
               ? <div className="empty-field-error">Please fill out field</div>
-              : <div style={{height: "24px"}}></div>
+              : <div style={{ height: "24px" }}></div>
           }
         </div>
         {
@@ -352,21 +353,21 @@ export function FormTeam(props: any) {
       <hr className='my-6 border-outline-2' />
 
       <div className='mt-5 flex flex-col'>
-        <InputComponent 
-          label='Number of players' 
-          onChange={setNumPlayers} 
-          type='text' 
-          style='min-w-full sm:min-w-[24rem]' 
+        <InputComponent
+          label='Number of players'
+          onChange={setNumPlayers}
+          type='text'
+          style='min-w-full sm:min-w-[24rem]'
           showError={numPlayersError} />
       </div>
 
       <div className='mt-5 flex flex-col'>
-        <InputComponent 
-          label='Estimated cost of event' 
-          onChange={setCost} 
-          prefix={<span className='ml-2 text-grey-classic'>$</span>} 
-          type='text' 
-          style='min-w-full sm:min-w-[24rem]' 
+        <InputComponent
+          label='Estimated cost of event'
+          onChange={setCost}
+          prefix={<span className='ml-2 text-grey-classic'>$</span>}
+          type='text'
+          style='min-w-full sm:min-w-[24rem]'
           showError={costError}
           description="This will be evenly splitted among the players" />
       </div>
@@ -387,8 +388,8 @@ export function FormTeam(props: any) {
 
       <div className='mt-6 grid grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2'>
         {
-          allFriends.map((friend, index) => 
-            <InvitationRow key={index} info={friend} onSelectMember={onSelectMember} checked={members.indexOf(friend._id) > -1} /> 
+          allFriends.map((friend, index) =>
+            <InvitationRow key={index} info={friend} onSelectMember={onSelectMember} checked={members.indexOf(friend._id) > -1} />
           )
         }
       </div>
@@ -396,7 +397,7 @@ export function FormTeam(props: any) {
   );
 }
 
-export function ConfirmationView(p: {onClose:() => void, eventInfo: any}) {
+export function ConfirmationView(p: { onClose: () => void, eventInfo: any }) {
   const [allSports, setAllSports] = useState([])
   const [allTeams, setAllTeams] = useState([])
   const [selectedSport, setSelectedSport] = useState("")
@@ -415,11 +416,11 @@ export function ConfirmationView(p: {onClose:() => void, eventInfo: any}) {
           "Access-Control-Allow-Origin": "*",
         }
       })
-      .then((res) => res.json())
-      .then((data) => {
+        .then((res) => res.json())
+        .then((data) => {
           newMembers.push(data.data)
         }
-      );
+        );
       if (newMembers.length > 4) break;
     }
 
@@ -434,33 +435,33 @@ export function ConfirmationView(p: {onClose:() => void, eventInfo: any}) {
         "Access-Control-Allow-Origin": "*",
       }
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         setAllSports(data.data);
       }
-    );
+      );
 
     fetch("http://127.0.0.1:5000/getTeams", {
-        method: "POST",
-        crossDomain: true,
-        headers: {
+      method: "POST",
+      crossDomain: true,
+      headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
+      },
+      body: JSON.stringify({
         token: window.localStorage.getItem("token"),
-        }),
+      }),
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         setAllTeams(data.data);
-    }
-    );
+      }
+      );
   }, []);
 
   useEffect(() => {
-    if ( allSports.length > 0 && allTeams.length > 0) {
+    if (allSports.length > 0 && allTeams.length > 0) {
       const newSport = allSports.filter(sport => sport.id === p.eventInfo.sportId)
       setSelectedSport(newSport[0].name)
       const newTeam = allTeams.filter(team => team.id === p.eventInfo.teamId)
@@ -526,7 +527,7 @@ export function ConfirmationView(p: {onClose:() => void, eventInfo: any}) {
         <p className='my-4 mr-12 self-center text-grey-grain'>Players</p>
         <div className='flex items-center self-center'>
           {
-            members.map((member, index) => 
+            members.map((member, index) =>
               <img
                 key={index}
                 className='box-content h-5.5 w-5.5 rounded-full border-4 border-grey-low'
@@ -536,10 +537,10 @@ export function ConfirmationView(p: {onClose:() => void, eventInfo: any}) {
           }
           {
             members.length > 4 &&
-              <p className='ml-3 text-fine'>
-                <span className='text-grey-grain'>+ </span>
-                <span>{members.length - 4} others</span>
-              </p>
+            <p className='ml-3 text-fine'>
+              <span className='text-grey-grain'>+ </span>
+              <span>{members.length - 4} others</span>
+            </p>
           }
         </div>
 

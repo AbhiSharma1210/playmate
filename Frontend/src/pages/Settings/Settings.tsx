@@ -9,7 +9,7 @@ import InputComponent from "components/InputComponent";
 import { Switch } from "components/Switch";
 import { useState, useEffect } from "react";
 
-function AccountSettings({userData}: any) {
+function AccountSettings({ userData }: any) {
   const [profilePicPath, setProfilePicPath] = useState("");
   const [firstName, setFirstName] = useState()
   const [lastName, setLastName] = useState()
@@ -27,7 +27,7 @@ function AccountSettings({userData}: any) {
 
     fetch("http://127.0.0.1:5000/updateProfile", {
       method: "POST",
-      crossDomain: true,
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -41,29 +41,35 @@ function AccountSettings({userData}: any) {
         profilePic: profilePicPath
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.data == "token expired") {
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.data == "token expired") {
           window.localStorage.clear();
           window.location.href = "../../login";
-      }
-      else {
-        if (data.status == "ok") {
         }
-      }
-    });
+        else {
+          if (data.status == "ok") {
+          }
+        }
+      });
   }
 
-  const saveProfilePic = async (e) => {
-    let file = e.target.files[0];
-    let fileName = e.target.files[0].name;
+  const saveProfilePic = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let file = e.target.files?.[0];
+    let fileName = file?.name;
+
+    if (!file || !fileName) return; // Prevent errors if file is null
+
 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", fileName);
 
     // Add the token to the body of the request
-    formData.append("token", window.localStorage.getItem("token"));
+    const token = window.localStorage.getItem("token");
+    if (token) {
+      formData.append("token", token);
+    }
 
     try {
       const res = await axios.post(
@@ -93,7 +99,7 @@ function AccountSettings({userData}: any) {
         <h2 className='min-w-0 overflow-hidden text-ellipsis text-lg font-medium'>
           Upload profile picture
         </h2>
-        <input style={{opacity: "0"}} onChange={saveProfilePic} type="file" name="file" accept="image/png, image/gif, image/jpeg" id="avatarFileInput" className="input-file" />
+        <input style={{ opacity: "0" }} onChange={saveProfilePic} type="file" name="file" accept="image/png, image/gif, image/jpeg" id="avatarFileInput" className="input-file" />
       </div>
 
       <div className='mt-6 flex flex-wrap items-center gap-x-5 gap-y-6'>
@@ -114,7 +120,7 @@ function AccountSettings({userData}: any) {
       </div>
 
       <div className='mt-6'>
-      <InputComponent label='User name' onChange={setUserName} init={userName} placeholder='User name' type='text' style='settings w-full md:w-80' showError={userNameError} />
+        <InputComponent label='User name' onChange={setUserName} init={userName} placeholder='User name' type='text' style='settings w-full md:w-80' showError={userNameError} />
         {/* <div className='app-textbox settings w-full md:w-80'>
           <label>User name</label>
           <div className='app-textbox-area'>
@@ -253,7 +259,7 @@ export function Settings() {
   useEffect(() => {
     fetch("http://127.0.0.1:5000/getUserData", {
       method: "POST",
-      crossDomain: true,
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -263,46 +269,46 @@ export function Settings() {
         token: window.localStorage.getItem("token"),
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setUserData(data.data);
-      
-      if (data.data == "token expired") {
-        if (window.location.pathname !== "/login") {
-          window.localStorage.clear();
-          window.location.href = "../../login";
-        }
-      }
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        setUserData(data.data);
 
-}, []);
+        if (data.data == "token expired") {
+          if (window.location.pathname !== "/login") {
+            window.localStorage.clear();
+            window.location.href = "../../login";
+          }
+        }
+      });
+
+  }, []);
 
   useEffect(() => {
-    if(popupMessage != "" && popupMessage != undefined && popupMessage != null){
-        console.log("popupMessage: ", popupMessage);
+    if (popupMessage != "" && popupMessage != undefined && popupMessage != null) {
+      console.log("popupMessage: ", popupMessage);
 
-        // Set the popup visible to true
-        setPopupVisible(true);
+      // Set the popup visible to true
+      setPopupVisible(true);
 
-        // Remove the popup message from the local storage
-        window.localStorage.removeItem("message");
+      // Remove the popup message from the local storage
+      window.localStorage.removeItem("message");
 
-        // Make the popup visible for 5 seconds
-        setTimeout(() => {
-            setPopupVisible(false);
-        }
+      // Make the popup visible for 5 seconds
+      setTimeout(() => {
+        setPopupVisible(false);
+      }
         , 5000);
 
-        console.log("popupVisible: ", popupVisible);
+      console.log("popupVisible: ", popupVisible);
     } else {
-        setPopupVisible(false);
+      setPopupVisible(false);
     }
-}, [popupMessage]);
+  }, [popupMessage]);
 
   function updatePassword() {
     fetch("http://127.0.0.1:5000/changePassword", {
       method: "POST",
-      crossDomain: true,
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

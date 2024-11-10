@@ -89,7 +89,7 @@ function DayGrid(p: {
           selected && "active"
         )}
         disabled={outside}
-        onClick={(e) => {e.preventDefault(); p.setSelected(current)}}
+        onClick={(e) => { e.preventDefault(); p.setSelected(current) }}
         key={i}
       >
         {format(current, "dd")}
@@ -111,7 +111,7 @@ function DayGrid(p: {
   );
 }
 
-const CalenderComponent = ({setSelectedDate, outSideClickFunc}: any) => {
+const CalenderComponent = ({ setSelectedDate, outSideClickFunc }: any) => {
   const [monthMask, setMonthMask] = useState(setDate(new Date(), 1));
   const [selected, setSelected] = useState(new Date());
 
@@ -132,14 +132,14 @@ const CalenderComponent = ({setSelectedDate, outSideClickFunc}: any) => {
     setSelectedDate(strDate);
   }, [selected])
 
-  function useOutsideAlerter(ref) {
+  function useOutsideAlerter(ref: React.RefObject<HTMLDivElement>) {
     useEffect(() => {
       /**
        * Alert if clicked on outside of element
        */
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-            outSideClickFunc(false);
+      function handleClickOutside(event: MouseEvent) {
+        if (ref.current && !ref.current.contains(event.target as Node)) {
+          outSideClickFunc(false);
         }
       }
       // Bind the event listener
@@ -152,7 +152,7 @@ const CalenderComponent = ({setSelectedDate, outSideClickFunc}: any) => {
   }
 
   const wrapperRef = useRef(null);
-    useOutsideAlerter(wrapperRef);
+  useOutsideAlerter(wrapperRef);
 
   return (
     <div ref={wrapperRef} className='rounded-card bg-grey-low p-6'>

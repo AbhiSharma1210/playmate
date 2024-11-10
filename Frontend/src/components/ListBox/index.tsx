@@ -6,18 +6,18 @@ import SelectDownArrow from "assets/select-down-arrow.svg";
 
 import "./styles.css";
 
-type ListboxProps<T> = {
+type ListboxProps<T extends string> = {  // Add `extends string`
   label?: React.ReactNode;
   placeholder?: string;
   btnClassName?: string;
-  onChangeValue: (value: string) => void
+  onChangeValue: (value: string) => void;
   data: T[];
   initValue?: T;
-
   keyFunc?: string | ((x: T) => React.Key);
   renderFunc?: (x: T) => React.ReactNode;
 };
-export function ListBox<T>({
+
+export function ListBox<T extends string>({
   keyFunc,
   renderFunc,
   label,
@@ -50,12 +50,14 @@ export function ListBox<T>({
   let { defaultValue: _$01, ref: _$02, selected, ...divProps } = props;
 
   useEffect(() => {
-    if (typeof selectedItem !== "object")
+    if (typeof selectedItem === "string")
       onChangeValue(selectedItem)
   }, [selectedItem])
 
   useEffect(() => {
-    setSelectedItem(selected)
+    if (selected !== undefined && typeof selected !== 'boolean') {
+      setSelectedItem(selected);  // Ensure `selected` is a valid `T`
+    }
   }, [selected])
 
   return (
@@ -63,7 +65,7 @@ export function ListBox<T>({
       {...divProps}
       value={selectedItem}
       onChange={setSelectedItem}
-      as='div'
+      as="div"
       className={cx("app-listbox", props.className)}
     >
       {label && <ImplListBox.Label>{label}</ImplListBox.Label>}
@@ -78,13 +80,13 @@ export function ListBox<T>({
       </ImplListBox.Button>
       <Transition
         as={React.Fragment}
-        leave='transition ease-in duration-100'
-        leaveFrom='opacity-100'
-        leaveTo='opacity-0'
+        leave="transition ease-in duration-100"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
       >
-        <ImplListBox.Options as='ul' className='app-listbox-options'>
-          {props.data.map(option => (
-            <ImplListBox.Option as='li' key={makeKey(option)} value={option}>
+        <ImplListBox.Options as="ul" className="app-listbox-options">
+          {props.data.map((option) => (
+            <ImplListBox.Option as="li" key={makeKey(option)} value={option}>
               {render(option)}
             </ImplListBox.Option>
           ))}

@@ -7,8 +7,8 @@ import { Transition } from "@headlessui/react";
 import { commonTransitionProps } from "components/PanelTransition";
 
 import EventMoreIcon from "assets/more.svg";
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import { useMenu } from "utils";
 
 function ActionsMenu() {
@@ -69,7 +69,7 @@ export function EventCard(props: EventCardProps) {
     return [hour, minute, period];
   }
 
-  function formatDateTime(dateTime : any) {
+  function formatDateTime(dateTime: any) {
     const dateArr = dateTime.split("/")
     // Format to e.g Jan 05
     var date = new Date(`${dateArr[2]}-${dateArr[1]}-${dateArr[0]}`);
@@ -93,7 +93,7 @@ export function EventCard(props: EventCardProps) {
         <p className='mb-1 flex items-center gap-x-2.5 text-fine text-grey-grain'>
           <ClockIcon className='flex-shrink-0 text-[--ev-card-accent-color]' />
           <span className='min-w-0 overflow-hidden text-ellipsis'>
-          {formatDateTime(props.event.date)} | {convert24to12(props.event.startTime)[0] + ":" + convert24to12(props.event.startTime)[1] + " " + convert24to12(props.event.startTime)[2]}
+            {formatDateTime(props.event.date)} | {convert24to12(props.event.startTime)[0] + ":" + convert24to12(props.event.startTime)[1] + " " + convert24to12(props.event.startTime)[2]}
           </span>
         </p>
         <p className='mb-1 flex items-center gap-x-2.5 text-fine text-dim-white'>

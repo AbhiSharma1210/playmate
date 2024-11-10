@@ -11,7 +11,17 @@ interface EventProps {
   iconUrl: string;
   time: { clock: number; period: "am" | "pm" };
   accentColorClass: string;
+  name: string;
+  location: string;
 }
+
+interface EventType {
+  startTime: string;
+  name: string;
+  location: string;
+  date: string;
+}
+
 function Event(props: EventProps) {
   let clock = props.time.clock;
   return (
@@ -39,22 +49,22 @@ function Event(props: EventProps) {
   );
 }
 
-export function EventList({events, date} : any) {
-  const [selectedEvents, setSelectedEvents] = useState([]);
-  function convert24to12(time: number) {
+export function EventList({ events, date }: { events: EventType[]; date: Date }) {
+  const [selectedEvents, setSelectedEvents] = useState<EventType[]>([]);
+  function convert24to12(time: string): [string, string, "am" | "pm"] {
     // time in Format: HH:MM
 
     let hour = parseInt(time.split(":")[0]);
     let minute = parseInt(time.split(":")[1]);
 
-    let period = "am";
+    let period: "am" | "pm" = "am";
 
     if (hour > 12) {
-      hour = (hour - 12).toString();
+      hour = (hour - 12);
       period = "pm";
     }
 
-    return [hour, minute, period];
+    return [hour.toString(), minute.toString(), period];
   }
 
   useEffect(() => {
@@ -85,13 +95,16 @@ export function EventList({events, date} : any) {
 
 
       {
-        selectedEvents.map((event: any, index: number) => {
+        selectedEvents.map((event: EventType, index: number) => {
           return (
             <Event
               key={index}
               accentColorClass='bg-yellow'
               iconUrl={EventOneIcon}
-              time={{ clock: convert24to12(event.startTime)[0] + ":" + convert24to12(event.startTime)[1], period: convert24to12(event.startTime)[2] }}
+              time={{
+                clock: parseInt(convert24to12(event.startTime)[0]),
+                period: convert24to12(event.startTime)[2] as "am" | "pm"
+              }}
               name={event.name}
               location={event.location}
             />

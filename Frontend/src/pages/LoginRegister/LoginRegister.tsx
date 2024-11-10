@@ -1,6 +1,6 @@
 import "./styles.css";
 
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useContext, useEffect } from "react";
 
 import { Tab } from "@headlessui/react";
 
@@ -9,11 +9,13 @@ import InputComponent from "components/InputComponent";
 import { UploadAvatar } from "components/UploadAvatar/UploadAvatar";
 import { Switch } from "components/Switch";
 
+// import { TransactionContext } from "components/Context/TransactionContext";
+
 function Login({
   onSubmit,
   onUsernameChange,
   onPasswordChange,
-} : any) {
+}: any) {
   return (
     <section>
 
@@ -25,7 +27,7 @@ function Login({
         <InputComponent label="Password" onChange={onPasswordChange} type="password" placeholder='Password' style="w-full md:w-80" />
       </div>
 
-      <button onClick={() => onSubmit()} className='mt-12 flex w-full items-center justify-center rounded-half bg-blue-high px-20 py-3 text-dim-black hover:bg-blue-high/80 md:w-auto'>
+      <button onClick={() => onSubmit()} className='mt-12 flex w-full items-center justify-center rounded-half bg-blue-high px-20 py-3 text-white hover:bg-blue-high/80 md:w-auto'>
         Login
       </button>
     </section>
@@ -75,7 +77,7 @@ export function LoginRegister() {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupVisible, setPopupVisible] = useState(false);
 
-  const closePopup = function() {
+  const closePopup = function () {
     // This function is called when the user clicks on the close button of the popup
 
     // Hide the popup
@@ -83,25 +85,25 @@ export function LoginRegister() {
   }
 
   useEffect(() => {
-      if(popupMessage != "" && popupMessage != undefined && popupMessage != null){
-          console.log("popupMessage: ", popupMessage);
+    if (popupMessage != "" && popupMessage != undefined && popupMessage != null) {
+      console.log("popupMessage: ", popupMessage);
 
-          // Set the popup visible to true
-          setPopupVisible(true);
+      // Set the popup visible to true
+      setPopupVisible(true);
 
-          // Remove the popup message from the local storage
-          window.localStorage.removeItem("message");
+      // Remove the popup message from the local storage
+      window.localStorage.removeItem("message");
 
-          // Make the popup visible for 5 seconds
-          setTimeout(() => {
-              setPopupVisible(false);
-          }
-          , 5000);
-
-          console.log("popupVisible: ", popupVisible);
-      } else {
-          setPopupVisible(false);
+      // Make the popup visible for 5 seconds
+      setTimeout(() => {
+        setPopupVisible(false);
       }
+        , 5000);
+
+      console.log("popupVisible: ", popupVisible);
+    } else {
+      setPopupVisible(false);
+    }
   }, [popupMessage]);
 
   useEffect(() => {
@@ -111,7 +113,7 @@ export function LoginRegister() {
   }, []);
 
   useEffect(() => {
-    if(email && password){
+    if (email && password) {
       setLoginBtnColor("bg-current");
     } else {
       setLoginBtnColor("bg-dark");
@@ -180,7 +182,7 @@ export function LoginRegister() {
   return (
     <PageView title='Login'>
       <Tab.Group manual defaultIndex={0}>
-        
+
         <Tab.List className='mb-12 flex max-w-full gap-x-2 overflow-x-scroll'>
           <Tab className='app-tab shrink-0 whitespace-nowrap !px-7'>
             Login
@@ -195,9 +197,9 @@ export function LoginRegister() {
             <Login onSubmit={login} onUsernameChange={setEmail} onPasswordChange={setPassword} />
           </Tab.Panel>
           <Tab.Panel>
-            <Register 
-              onSubmit={register} 
-              onUsernameChange={setEmail} 
+            <Register
+              onSubmit={register}
+              onUsernameChange={setEmail}
               onPasswordChange={setPassword}
               onFnameChange={setFname}
               onLnameChange={setLname}

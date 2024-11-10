@@ -2,32 +2,32 @@ import { useRef, useEffect, useState } from "react";
 import "./styles.css"
 
 export function TimePicker(props: any) {
-  const { setSelectedTime, outSideClickFunc, startTime } = props;
+	const { setSelectedTime, outSideClickFunc, startTime } = props;
 	const [selectedHour, setSelectedHour] = useState("00")
 	const [selectedMin, setSelectedMin] = useState("00")
 	const [lowHour, setLowHour] = useState(0)
 	const [lowMin, setLowMin] = useState(0)
-	const hourArr = Array.from({length: 24})
-	const minArr = Array.from({length: 60})
+	const hourArr = Array.from({ length: 24 })
+	const minArr = Array.from({ length: 60 })
 
-	function useOutsideAlerter(ref) {
-    useEffect(() => {
-      /**
-       * Alert if clicked on outside of element
-       */
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-            outSideClickFunc(false);
-        }
-      }
-      // Bind the event listener
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        // Unbind the event listener on clean up
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  }
+	function useOutsideAlerter(ref: React.RefObject<HTMLDivElement>) {
+		useEffect(() => {
+			/**
+			 * Alert if clicked on outside of element
+			 */
+			function handleClickOutside(event: MouseEvent) {
+				if (ref.current && !ref.current.contains(event.target as Node)) {
+					outSideClickFunc(false);
+				}
+			}
+			// Bind the event listener
+			document.addEventListener("mousedown", handleClickOutside);
+			return () => {
+				// Unbind the event listener on clean up
+				document.removeEventListener("mousedown", handleClickOutside);
+			};
+		}, [ref]);
+	}
 
 	useEffect(() => {
 		if (startTime) {
@@ -38,7 +38,7 @@ export function TimePicker(props: any) {
 			} else {
 				setLowHour(parseInt(timeArr[0]))
 				setLowMin(parseInt(timeArr[1]))
-			} 
+			}
 		}
 	}, [startTime])
 
@@ -47,7 +47,7 @@ export function TimePicker(props: any) {
 			const timeArr = startTime.split(":");
 			if (parseInt(selectedHour) > lowHour) {
 				setLowMin(0)
-			} 
+			}
 			if (lowHour === parseInt(selectedHour)) {
 				setLowMin(parseInt(timeArr[1]) + 1)
 			}
@@ -62,11 +62,11 @@ export function TimePicker(props: any) {
 		setSelectedTime(`${strHour}:${strMin}`)
 	}
 
-  const wrapperRef = useRef(null);
+	const wrapperRef = useRef(null);
 	useOutsideAlerter(wrapperRef);
-	
-  return (
-    <div ref={wrapperRef} className="rounded-card bg-grey-low p-2 flex h-60">
+
+	return (
+		<div ref={wrapperRef} className="rounded-card bg-grey-low p-2 flex h-60">
 			<div className="flex flex-col overflow-auto time-cells hours">
 				{
 					hourArr.map((_, index) =>
@@ -86,6 +86,6 @@ export function TimePicker(props: any) {
 					)
 				}
 			</div>
-    </div>
-  );
+		</div>
+	);
 }

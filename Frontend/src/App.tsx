@@ -12,6 +12,7 @@ import { NetworkIndex } from "pages/MyNetwork/NetworkIndex";
 import { MyPlaymate } from "pages/MyPlaymate/MyPlaymate";
 import { Settings } from "pages/Settings/Settings";
 import { LoginRegister } from "pages/LoginRegister/LoginRegister";
+import { TransactionProvider } from './components/Context/TransactionContext';
 
 import "@fontsource/public-sans/300.css";
 import "@fontsource/public-sans/400.css";
@@ -79,7 +80,9 @@ export function App() {
 
   return (
     <React.Fragment>
-      <RouterProvider router={router} />
+      <TransactionProvider>
+        <RouterProvider router={router} />
+      </TransactionProvider>
     </React.Fragment>
   );
 }

@@ -10,8 +10,8 @@ import { DialogCrossButton } from "components/DialogCrossButton";
 import Member1 from "assets/member-1.png";
 import Member2 from "assets/member-2.png";
 import Member3 from "assets/member-3.png";
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import CopyLinkIcon from 'assets/copy-link.svg';
 import copyToClipboard from 'copy-to-clipboard';
 
@@ -59,7 +59,7 @@ export function FormTraining(props: any) {
   const onChangeLocation = (key: string) => {
     setSearchKey(key)
     setEventLocation(key)
-    getPlacePredictions({input: key})
+    getPlacePredictions({ input: key })
   }
 
   useEffect(() => {
@@ -80,15 +80,15 @@ export function FormTraining(props: any) {
         token: window.localStorage.getItem("token"),
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      setAllFriends(data.data);
-      
-      if (data.data == "token expired") {
-        window.localStorage.clear();
-        window.location.href = "./login";
-      }
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        setAllFriends(data.data);
+
+        if (data.data == "token expired") {
+          window.localStorage.clear();
+          window.location.href = "./login";
+        }
+      });
 
     fetch("http://127.0.0.1:5000/getSports", {
       method: "GET",
@@ -99,11 +99,11 @@ export function FormTraining(props: any) {
         "Access-Control-Allow-Origin": "*",
       }
     })
-    .then((res) => res.json())
-    .then((data) => {
+      .then((res) => res.json())
+      .then((data) => {
         setSportsData(data.data);
       }
-    );
+      );
   }, []);
 
   const onSelectMember = (selected: boolean, userId: string) => {
@@ -179,7 +179,7 @@ export function FormTraining(props: any) {
         })}
       />
       {
-        gameTypeError && <div className="mt-2" style={{color: "red"}}>Please select type</div>
+        gameTypeError && <div className="mt-2" style={{ color: "red" }}>Please select type</div>
       }
 
       {/* Row */}
@@ -193,22 +193,22 @@ export function FormTraining(props: any) {
           <div className="app-textbox">
             <label>Date</label>
             <div className='app-textbox-area'>
-              <input 
+              <input
                 onFocus={() => setShowCalendar(true)}
                 value={date}
-                size={1} 
+                size={1}
                 placeholder='dd/mm/yyyy' />
               <img className='mr-2 w-6' src={IconDate} />
             </div>
           </div>
           {
-            showCalendar && 
-              <div className="absolute calendar z-10 calendar-outline">
-                <CalenderComponent setSelectedDate={setDate} outSideClickFunc={() => setShowCalendar(false)} />
-              </div>
+            showCalendar &&
+            <div className="absolute calendar z-10 calendar-outline">
+              <CalenderComponent setSelectedDate={setDate} outSideClickFunc={() => setShowCalendar(false)} />
+            </div>
           }
           {
-            dateError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            dateError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
         <div className=' min-w-full sm:min-w-[12rem] flex-1 flex flex-col relative'>
@@ -217,42 +217,42 @@ export function FormTraining(props: any) {
             <div className='app-textbox-area'>
               <input
                 onFocus={() => setShowStartTimePicker(true)}
-                value={startTime} 
-                size={1} 
+                value={startTime}
+                size={1}
                 placeholder='00:00' />
               <img className='mr-2 w-6' src={IconTime} />
             </div>
           </div>
           {
-            showStartTimePicker && 
-              <div className="absolute time-picker z-10 calendar-outline">
-                <TimePicker setSelectedTime={setStartTime} outSideClickFunc={() => setShowStartTimePicker(false)} />
-              </div>
+            showStartTimePicker &&
+            <div className="absolute time-picker z-10 calendar-outline">
+              <TimePicker setSelectedTime={setStartTime} outSideClickFunc={() => setShowStartTimePicker(false)} />
+            </div>
           }
           {
-            startTimeError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            startTimeError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
         <div className=' min-w-full sm:min-w-[12rem] flex-1 flex flex-col relative'>
           <div className="app-textbox">
             <label>End time</label>
             <div className='app-textbox-area'>
-              <input 
+              <input
                 onFocus={() => setShowEndTimePicker(true)}
-                value={endTime} 
-                size={1} 
+                value={endTime}
+                size={1}
                 placeholder='00:00' />
               <img className='mr-2 w-6' src={IconTime} />
             </div>
           </div>
           {
-            showEndTimePicker && 
-              <div className="absolute time-picker z-10 calendar-outline">
-                <TimePicker setSelectedTime={setEndTime} outSideClickFunc={() => setShowEndTimePicker(false)} startTime={startTime} />
-              </div>
+            showEndTimePicker &&
+            <div className="absolute time-picker z-10 calendar-outline">
+              <TimePicker setSelectedTime={setEndTime} outSideClickFunc={() => setShowEndTimePicker(false)} startTime={startTime} />
+            </div>
           }
           {
-            endTimeError && <div className="mt-2" style={{color: "red"}}>Please fill out field</div>
+            endTimeError && <div className="mt-2" style={{ color: "red" }}>Please fill out field</div>
           }
         </div>
       </div>
@@ -267,7 +267,7 @@ export function FormTraining(props: any) {
           {
             locationError
               ? <div className="empty-field-error">Please fill out field</div>
-              : <div style={{height: "24px"}}></div>
+              : <div style={{ height: "24px" }}></div>
           }
         </div>
         {
@@ -287,11 +287,11 @@ export function FormTraining(props: any) {
       <hr className='my-6 border-outline-2' />
 
       <div className='mt-5 flex flex-col'>
-        <InputComponent 
-          label='Number of players' 
-          onChange={setNumPlayers} 
-          type='text' 
-          style='min-w-full sm:min-w-[24rem]' 
+        <InputComponent
+          label='Number of players'
+          onChange={setNumPlayers}
+          type='text'
+          style='min-w-full sm:min-w-[24rem]'
           showError={numPlayersError} />
       </div>
 
@@ -311,8 +311,8 @@ export function FormTraining(props: any) {
 
       <div className='mt-6 grid grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-2'>
         {
-          allFriends.map((friend, index) => 
-            <InvitationRow key={index} info={friend} onSelectMember={onSelectMember} checked={members.indexOf(friend._id) > -1} /> 
+          allFriends.map((friend, index) =>
+            <InvitationRow key={index} info={friend} onSelectMember={onSelectMember} checked={members.indexOf(friend._id) > -1} />
           )
         }
       </div>
@@ -321,7 +321,7 @@ export function FormTraining(props: any) {
 }
 
 
-export function ConfirmationView(p: {onClose:() => void}) {
+export function ConfirmationView(p: { onClose: () => void }) {
   return (
     <>
       <Dialog.Title as='header' className='relative'>

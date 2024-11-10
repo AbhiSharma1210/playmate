@@ -5,8 +5,8 @@ import { MembersAndLineup } from "components/MembersAndLineup/MembersAndLineup";
 
 import ProfileIMG from "assets/network-big-1.png";
 
-import { ClockIcon } from "components/adaptive-icons/PinMarker";
-import { PinMarkerIcon } from "components/adaptive-icons/Clock";
+import { ClockIcon } from "components/adaptive-icons/Clock";
+import { PinMarkerIcon } from "components/adaptive-icons/PinMarker";
 import RightArrow from "assets/right-arrow.svg";
 
 import Team1 from "assets/team-1.png";

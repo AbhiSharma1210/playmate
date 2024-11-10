@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => (
+export const PinMarkerIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     width={24}
@@ -10,12 +10,12 @@ export const ClockIcon = (props: React.SVGProps<SVGSVGElement>) => (
   >
     <path
       fill='currentColor'
-      d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z'
+      d='M20.62 8.45c-1.05-4.62-5.08-6.7-8.62-6.7h-.01c-3.53 0-7.57 2.07-8.62 6.69-1.17 5.16 1.99 9.53 4.85 12.28A5.436 5.436 0 0 0 12 22.25c1.36 0 2.72-.51 3.77-1.53 2.86-2.75 6.02-7.11 4.85-12.27Z'
       opacity={0.4}
     />
     <path
       fill='currentColor'
-      d='M15.71 15.93a.67.67 0 0 1-.38-.11l-3.1-1.85c-.77-.46-1.34-1.47-1.34-2.36v-4.1c0-.41.34-.75.75-.75s.75.34.75.75v4.1c0 .36.3.89.61 1.07l3.1 1.85c.36.21.47.67.26 1.03a.77.77 0 0 1-.65.37Z'
+      d='M12 13.46a3.15 3.15 0 1 0 0-6.3 3.15 3.15 0 0 0 0 6.3Z'
     />
   </svg>
 );
